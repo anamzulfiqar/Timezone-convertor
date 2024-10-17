@@ -266,8 +266,8 @@ if st.button("Convert Time", help="Click to convert the time from source to targ
         minute = input_time.minute
 
         if hour is not None and minute is not None:
-            # Create a datetime object based on user input
-            source_time = datetime.combine(input_date, datetime.min.replace(hour=hour, minute=minute))
+            # Create a time object based on user input
+            source_time = datetime.combine(input_date, datetime.min.time().replace(hour=hour, minute=minute))
 
             # Get the corresponding timezone for the selected countries
             source_timezone = pytz.timezone(timezones_dict[source_country])
