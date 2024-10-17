@@ -23,7 +23,7 @@ st.markdown("""
         <p>Welcome to the Time Zone Converter!</p>
         <p>Please follow these steps:</p>
         <ol>
-            <li>Enter the specific date and time you wish to convert.</li>
+            <li>Enter the specific date and time you wish to convert in the format "hh:mm AM/PM".</li>
             <li>Select the source country and target country.</li>
             <li>Click the "Convert Time" button to see the converted time.</li>
         </ol>
@@ -36,12 +36,8 @@ st.subheader("Enter a Specific Time to Convert")
 # Allow user to input time and date without default value
 input_date = st.date_input("Select a date:", value=datetime.now().date())
 
-# Input fields for time (hour, minute) and AM/PM selection
-hour = st.number_input("Hour (1-12):", min_value=1, max_value=12, value=None)
-minute = st.number_input("Minute (0-59):", min_value=0, max_value=59, value=None)
-
-# Dropdown for selecting AM or PM
-ampm = st.selectbox("Select AM or PM:", ("AM", "PM"))
+# Input field for time (hh:mm AM/PM)
+time_input = st.text_input("Enter Time (hh:mm AM/PM):", placeholder="e.g. 02:30 PM")
 
 # Comprehensive list of time zones for various countries
 timezones_dict = {
@@ -263,21 +259,29 @@ target_country = st.selectbox("Select Target Country", list(timezones_dict.keys(
 
 # Button to convert time
 if st.button("Convert Time", help="Click to convert the time from source to target country"):
-    if hour is not None and minute is not None:
-        # Create a datetime object based on user input
-        hour_24 = hour + (12 if ampm == "PM" else 0)  # Convert to 24-hour format
-        source_time = datetime.combine(input_date, datetime.min.replace(hour=hour_24, minute=minute))
+    # Parse the time input
+    try:
+        input_time = datetime.strptime(time_input.strip(), "%I:%M %p")
+        hour = input_time.hour
+        minute = input_time.minute
 
-        # Get the corresponding timezone for the selected countries
-        source_timezone = pytz.timezone(timezones_dict[source_country])
-        target_timezone = pytz.timezone(timezones_dict[target_country])
+        if hour is not None and minute is not None:
+            # Create a datetime object based on user input
+            hour_24 = hour  # 24-hour format
+            source_time = datetime.combine(input_date, datetime.min.replace(hour=hour_24, minute=minute))
 
-        # Localize the source time and convert it to the target timezone
-        localized_time = source_timezone.localize(source_time)
-        converted_time = localized_time.astimezone(target_timezone)
+            # Get the corresponding timezone for the selected countries
+            source_timezone = pytz.timezone(timezones_dict[source_country])
+            target_timezone = pytz.timezone(timezones_dict[target_country])
 
-        # Display the converted time
-        st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %I:%M:%S %p')}")
+            # Localize the source time and convert it to the target timezone
+            localized_time = source_timezone.localize(source_time)
+            converted_time = localized_time.astimezone(target_timezone)
+
+            # Display the converted time
+            st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %I:%M:%S %p')}")
+    except ValueError:
+        st.error("Invalid time format! Please use 'hh:mm AM/PM' format.")
 
 # Footer for app information
 st.markdown("""
