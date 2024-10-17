@@ -12,15 +12,20 @@ st.subheader("Enter a Specific Time to Convert")
 input_time = st.time_input("Select a time:")
 input_date = st.date_input("Select a date:")
 
-# Custom list of common time zones (you can add more if needed)
+# Comprehensive list of time zones for various countries
 timezones_dict = {
     "Afghanistan": "Asia/Kabul",
     "Albania": "Europe/Tirane",
     "Algeria": "Africa/Algiers",
     "Andorra": "Europe/Andorra",
     "Angola": "Africa/Luanda",
+    "Antigua and Barbuda": "America/Antigua",
     "Argentina": "America/Argentina/Buenos_Aires",
     "Armenia": "Asia/Yerevan",
+    "Australia (Adelaide)": "Australia/Adelaide",
+    "Australia (Brisbane)": "Australia/Brisbane",
+    "Australia (Melbourne)": "Australia/Melbourne",
+    "Australia (Perth)": "Australia/Perth",
     "Australia (Sydney)": "Australia/Sydney",
     "Austria": "Europe/Vienna",
     "Azerbaijan": "Asia/Baku",
@@ -36,7 +41,8 @@ timezones_dict = {
     "Bolivia": "America/La_Paz",
     "Bosnia and Herzegovina": "Europe/Sarajevo",
     "Botswana": "Africa/Gaborone",
-    "Brazil": "America/Sao_Paulo",
+    "Brazil (Brasília)": "America/Brasilia",
+    "Brazil (São Paulo)": "America/Sao_Paulo",
     "Brunei": "Asia/Brunei",
     "Bulgaria": "Europe/Sofia",
     "Burkina Faso": "Africa/Ouagadougou",
@@ -44,15 +50,17 @@ timezones_dict = {
     "Cabo Verde": "Atlantic/Cape_Verde",
     "Cambodia": "Asia/Phnom_Penh",
     "Cameroon": "Africa/Douala",
-    "Canada (Toronto)": "America/Toronto",
-    "Canada (Vancouver)": "America/Vancouver",
-    "Central African Republic": "Africa/Bangui",
-    "Chad": "Africa/N'Djamena",
+    "Canada (Atlantic)": "America/Halifax",
+    "Canada (Central)": "America/Winnipeg",
+    "Canada (Eastern)": "America/Toronto",
+    "Canada (Mountain)": "America/Edmonton",
+    "Canada (Pacific)": "America/Vancouver",
     "Chile": "America/Santiago",
-    "China (Beijing)": "Asia/Shanghai",
+    "China": "Asia/Shanghai",
     "Colombia": "America/Bogota",
-    "Comoros": "Africa/Moroni",
+    "Comoros": "Indian/Comoro",
     "Congo (Congo-Brazzaville)": "Africa/Brazzaville",
+    "Congo (Democratic Republic of the)": "Africa/Kinshasa",
     "Costa Rica": "America/Costa_Rica",
     "Croatia": "Europe/Zagreb",
     "Cuba": "America/Havana",
@@ -66,7 +74,7 @@ timezones_dict = {
     "Egypt": "Africa/Cairo",
     "El Salvador": "America/El_Salvador",
     "Equatorial Guinea": "Africa/Malabo",
-    "Eritrea": "Africa/Asmara",
+    "Eritrea": "Africa/Asmera",
     "Estonia": "Europe/Tallinn",
     "Eswatini": "Africa/Mbabane",
     "Ethiopia": "Africa/Addis_Ababa",
@@ -89,7 +97,7 @@ timezones_dict = {
     "Hungary": "Europe/Budapest",
     "Iceland": "Atlantic/Reykjavik",
     "India": "Asia/Kolkata",
-    "Indonesia (Bali)": "Asia/Makassar",
+    "Indonesia (Bali)": "Asia/Ubud",
     "Indonesia (Jakarta)": "Asia/Jakarta",
     "Iran": "Asia/Tehran",
     "Iraq": "Asia/Baghdad",
@@ -99,7 +107,8 @@ timezones_dict = {
     "Jamaica": "America/Jamaica",
     "Japan": "Asia/Tokyo",
     "Jordan": "Asia/Amman",
-    "Kazakhstan": "Asia/Almaty",
+    "Kazakhstan (Almaty)": "Asia/Almaty",
+    "Kazakhstan (Nur-Sultan)": "Asia/Nur-Sultan",
     "Kenya": "Africa/Nairobi",
     "Kiribati": "Pacific/Tarawa",
     "Kuwait": "Asia/Kuwait",
@@ -122,12 +131,13 @@ timezones_dict = {
     "Marshall Islands": "Pacific/Majuro",
     "Mauritania": "Africa/Nouakchott",
     "Mauritius": "Indian/Mauritius",
-    "Mexico (Mexico City)": "America/Mexico_City",
-    "Mexico (Tijuana)": "America/Tijuana",
-    "Micronesia": "Pacific/Guam",
+    "Mexico (Central)": "America/Mexico_City",
+    "Mexico (Pacific)": "America/Tijuana",
+    "Micronesia": "Pacific/Chuuk",
     "Moldova": "Europe/Chisinau",
     "Monaco": "Europe/Monaco",
     "Mongolia (Ulaanbaatar)": "Asia/Ulaanbaatar",
+    "Mongolia (Hovd)": "Asia/Hovd",
     "Montenegro": "Europe/Podgorica",
     "Morocco": "Africa/Casablanca",
     "Mozambique": "Africa/Maputo",
@@ -137,6 +147,7 @@ timezones_dict = {
     "Nepal": "Asia/Kathmandu",
     "Netherlands": "Europe/Amsterdam",
     "New Zealand (Auckland)": "Pacific/Auckland",
+    "New Zealand (Wellington)": "Pacific/Wellington",
     "Nicaragua": "America/Managua",
     "Niger": "Africa/Niamey",
     "Nigeria": "Africa/Lagos",
@@ -144,6 +155,7 @@ timezones_dict = {
     "Norway": "Europe/Oslo",
     "Oman": "Asia/Muscat",
     "Pakistan": "Asia/Karachi",
+    "Palau": "Pacific/Palau",
     "Panama": "America/Panama",
     "Papua New Guinea": "Pacific/Port_Moresby",
     "Paraguay": "America/Asuncion",
@@ -154,18 +166,16 @@ timezones_dict = {
     "Qatar": "Asia/Qatar",
     "Romania": "Europe/Bucharest",
     "Russia (Moscow)": "Europe/Moscow",
+    "Russia (Yekaterinburg)": "Asia/Yekaterinburg",
     "Rwanda": "Africa/Kigali",
     "Saint Kitts and Nevis": "America/St_Kitts",
     "Saint Lucia": "America/St_Lucia",
     "Saint Vincent and the Grenadines": "America/St_Vincent",
     "Samoa": "Pacific/Apia",
     "San Marino": "Europe/San_Marino",
-    "Sao Tome and Principe": "Africa/Sao_Tome",
     "Saudi Arabia": "Asia/Riyadh",
     "Senegal": "Africa/Dakar",
     "Serbia": "Europe/Belgrade",
-    "Seychelles": "Indian/Mahe",
-    "Sierra Leone": "Africa/Freetown",
     "Singapore": "Asia/Singapore",
     "Slovakia": "Europe/Bratislava",
     "Slovenia": "Europe/Ljubljana",
@@ -178,26 +188,57 @@ timezones_dict = {
     "Sri Lanka": "Asia/Colombo",
     "Sudan": "Africa/Khartoum",
     "Suriname": "America/Paramaribo",
-    "Sweden": "Europe/Stockholm
-    "United Kingdom": "Europe/London",
+    "Sweden": "Europe/Stockholm",
+    "Switzerland": "Europe/Zurich",
+    "Syria": "Asia/Damascus",
+    "Taiwan": "Asia/Taipei",
+    "Tajikistan": "Asia/Dushanbe",
+    "Tanzania": "Africa/Dodoma",
+    "Thailand": "Asia/Bangkok",
+    "Timor-Leste": "Asia/Dili",
+    "Togo": "Africa/Lome",
+    "Tonga": "Pacific/Tongatapu",
+    "Trinidad and Tobago": "America/Port_of_Spain",
+    "Tunisia": "Africa/Tunis",
+    "Turkey": "Europe/Istanbul",
+    "Turkmenistan": "Asia/Ashgabat",
+    "Tuvalu": "Pacific/Funafuti",
+    "Uganda": "Africa/Kampala",
+    "Ukraine": "Europe/Kyiv",
+    "United Arab Emirates": "Asia/Dubai",
+    "United Kingdom": "Europe/London",  # Included United Kingdom
+    "United States (Eastern)": "America/New_York",
+    "United States (Central)": "America/Chicago",
+    "United States (Mountain)": "America/Denver",
+    "United States (Pacific)": "America/Los_Angeles",
+    "Uruguay": "America/Montevideo",
+    "Uzbekistan": "Asia/Tashkent",
+    "Vanuatu": "Pacific/Efate",
+    "Vatican City": "Europe/Vatican",
+    "Venezuela": "America/Caracas",
+    "Vietnam": "Asia/Ho_Chi_Minh",
+    "Yemen": "Asia/Aden",
+    "Zambia": "Africa/Lusaka",
+    "Zimbabwe": "Africa/Harare",
 }
 
-# Dropdown for selecting source time zone
-selected_source_country = st.selectbox("Select source country:", list(timezones_dict.keys()))
-selected_source_timezone = timezones_dict[selected_source_country]
+# Display dropdown for selecting countries
+country = st.selectbox("Select a country:", list(timezones_dict.keys()))
 
-# Dropdown for selecting target time zone
-selected_target_country = st.selectbox("Select target country:", list(timezones_dict.keys()))
-selected_target_timezone = timezones_dict[selected_target_country]
+# Get the selected timezone
+timezone = timezones_dict[country]
 
-# Combine the selected date and time into a datetime object
-if input_time and input_date:
-    input_datetime = datetime.combine(input_date, input_time)
-    source_timezone = pytz.timezone(selected_source_timezone)
-    input_datetime_source = source_timezone.localize(input_datetime)
+# Create the full datetime object
+full_datetime = datetime.combine(input_date, input_time)
 
-    # Button to convert time
-    if st.button("Convert"):
-        # Convert the input time to the selected target time zone
-        converted_time = input_datetime_source.astimezone(pytz.timezone(selected_target_timezone))
-        st.write(f"Converted time in {selected_target_country}: {converted_time.strftime('%Y-%m-%d %H:%M:%S')}")
+# Convert the time to the selected timezone
+local_tz = pytz.timezone(timezone)
+local_time = local_tz.localize(full_datetime)
+
+# Show the converted time in other major time zones
+st.subheader(f"Converted Times for {country}:")
+for country_name, tz_name in timezones_dict.items():
+    if country_name != country:  # Skip the selected country
+        target_tz = pytz.timezone(tz_name)
+        target_time = local_time.astimezone(target_tz)
+        st.write(f"{country_name}: {target_time.strftime('%Y-%m-%d %H:%M:%S')} ({tz_name})")
