@@ -2,32 +2,26 @@ import streamlit as st
 from datetime import datetime
 import pytz
 
-# Add background image (ensure the URL is accessible)
-st.markdown(
-    """
+# Set page config
+st.set_page_config(page_title="🌍 Time Zone Converter", page_icon="🌍")
+
+# Title of the app with some styling
+st.title("🌍 Time Zone Converter")
+st.markdown("""
     <style>
-    .stApp {
-        background-image: url('https://example.com/path-to-your-background-image.jpg');  /* Replace with a valid URL */
-        background-size: cover;
-        background-position: center;
+    .title {
+        text-align: center;
+        color: #4B0082;
+        font-size: 2.5em;
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# Title of the app
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🌍 Time Zone Converter</h1>", unsafe_allow_html=True)
-
-# Instructions for users
-st.markdown("<h3 style='color: #555;'>Instructions</h3>", unsafe_allow_html=True)
-st.write("1. Select the date and time you want to convert. 🗓️")
-st.write("2. Choose the source country (where the time is currently). 🌍")
-st.write("3. Select the target country (where you want to know the time). 🕒")
-st.write("4. Click the 'Convert' button to see the converted time. 🔄")
+# Subheader for user input
+st.subheader("Enter a Specific Time to Convert")
 
 # Allow user to input time and date
-input_time = st.slider("Select a time:", value=datetime.now().time(), format="HH:mm")
+input_time = st.time_input("Select a time:")
 input_date = st.date_input("Select a date:")
 
 # Comprehensive list of time zones for various countries
@@ -184,7 +178,7 @@ timezones_dict = {
     "Qatar": "Asia/Qatar",
     "Romania": "Europe/Bucharest",
     "Russia (Moscow)": "Europe/Moscow",
-    "Russia (Siberia)": "Asia/Krasnoyarsk",
+    "Russia (Yekaterinburg)": "Asia/Yekaterinburg",
     "Rwanda": "Africa/Kigali",
     "Saint Kitts and Nevis": "America/St_Kitts",
     "Saint Lucia": "America/St_Lucia",
@@ -214,7 +208,7 @@ timezones_dict = {
     "Syria": "Asia/Damascus",
     "Taiwan": "Asia/Taipei",
     "Tajikistan": "Asia/Dushanbe",
-    "Tanzania": "Africa/Dar_es_Salaam",
+    "Tanzania": "Africa/Dodoma",
     "Thailand": "Asia/Bangkok",
     "Timor-Leste": "Asia/Dili",
     "Togo": "Africa/Lome",
@@ -225,12 +219,11 @@ timezones_dict = {
     "Turkmenistan": "Asia/Ashgabat",
     "Tuvalu": "Pacific/Funafuti",
     "Uganda": "Africa/Kampala",
-    "Ukraine": "Europe/Kiev",
+    "Ukraine": "Europe/Kyiv",
     "United Arab Emirates": "Asia/Dubai",
     "United Kingdom": "Europe/London",
-    "United States (Alaska)": "America/Anchorage",
-    "United States (Central)": "America/Chicago",
     "United States (Eastern)": "America/New_York",
+    "United States (Central)": "America/Chicago",
     "United States (Mountain)": "America/Denver",
     "United States (Pacific)": "America/Los_Angeles",
     "Uruguay": "America/Montevideo",
@@ -244,23 +237,35 @@ timezones_dict = {
     "Zimbabwe": "Africa/Harare"
 }
 
-# Select source and target countries
-source_country = st.selectbox("Select the source country:", list(timezones_dict.keys()))
-target_country = st.selectbox("Select the target country:", list(timezones_dict.keys()))
+# Create two select boxes for choosing countries
+source_country = st.selectbox("Select Source Country", list(timezones_dict.keys()))
+target_country = st.selectbox("Select Target Country", list(timezones_dict.keys()))
 
-# Convert button
-if st.button("Convert"):
-    source_tz = pytz.timezone(timezones_dict[source_country])
-    target_tz = pytz.timezone(timezones_dict[target_country])
+# Button to convert time
+if st.button("Convert Time"):
+    if input_time and input_date:
+        # Combine date and time into a datetime object
+        source_time = datetime.combine(input_date, input_time)
+        
+        # Get the corresponding timezone for the selected countries
+        source_timezone = pytz.timezone(timezones_dict[source_country])
+        target_timezone = pytz.timezone(timezones_dict[target_country])
+        
+        # Localize the source time and convert it to the target timezone
+        localized_time = source_timezone.localize(source_time)
+        converted_time = localized_time.astimezone(target_timezone)
+        
+        # Display the converted time
+        st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # Get the current date and time in the source timezone
-    source_datetime = datetime.combine(input_date, input_time)
-    source_datetime = source_tz.localize(source_datetime)
-
-    # Convert to the target timezone
-    target_datetime = source_datetime.astimezone(target_tz)
-
-    # Display results
-    st.markdown("<h3 style='color: #4CAF50;'>Converted Time</h3>", unsafe_allow_html=True)
-    st.write(f"Original Time in **{source_country}**: {source_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
-    st.write(f"Converted Time in **{target_country}**: {target_datetime.strftime('%Y-%m-%d %H:%M:%S')}")
+# Footer for app information
+st.markdown("""
+    <style>
+    .footer {
+        text-align: center;
+        font-size: 1em;
+        color: #808080;
+    }
+    </style>
+    <div class="footer">Created by [Anam Zulfiqar]</div>
+""", unsafe_allow_html=True)
