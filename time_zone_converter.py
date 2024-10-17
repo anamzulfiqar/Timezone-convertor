@@ -34,8 +34,14 @@ st.markdown("""
 st.subheader("Enter a Specific Time to Convert")
 
 # Allow user to input time and date without default value
-input_time = st.time_input("Select a time (in HH:MM AM/PM format):", value=None)
 input_date = st.date_input("Select a date:", value=datetime.now().date())
+
+# Input fields for time (hour, minute) and AM/PM selection
+hour = st.number_input("Hour (1-12):", min_value=1, max_value=12, value=None)
+minute = st.number_input("Minute (0-59):", min_value=0, max_value=59, value=None)
+
+# Dropdown for selecting AM or PM
+ampm = st.selectbox("Select AM or PM:", ("AM", "PM"))
 
 # Comprehensive list of time zones for various countries
 timezones_dict = {
@@ -176,12 +182,12 @@ timezones_dict = {
     "Nicaragua": "America/Managua",
     "Niger": "Africa/Niamey",
     "Nigeria": "Africa/Lagos",
+    "North Korea": "Asia/Pyongyang",
     "North Macedonia": "Europe/Skopje",
     "Norway": "Europe/Oslo",
     "Oman": "Asia/Muscat",
     "Pakistan": "Asia/Karachi",
     "Palau": "Pacific/Palau",
-    "Palestine": "Asia/Gaza",
     "Panama": "America/Panama",
     "Papua New Guinea": "Pacific/Port_Moresby",
     "Paraguay": "America/Asuncion",
@@ -257,9 +263,10 @@ target_country = st.selectbox("Select Target Country", list(timezones_dict.keys(
 
 # Button to convert time
 if st.button("Convert Time", help="Click to convert the time from source to target country"):
-    if input_time and input_date:
-        # Combine date and time into a datetime object
-        source_time = datetime.combine(input_date, input_time)
+    if hour is not None and minute is not None:
+        # Create a datetime object based on user input
+        hour_24 = hour + (12 if ampm == "PM" else 0)  # Convert to 24-hour format
+        source_time = datetime.combine(input_date, datetime.min.replace(hour=hour_24, minute=minute))
 
         # Get the corresponding timezone for the selected countries
         source_timezone = pytz.timezone(timezones_dict[source_country])
