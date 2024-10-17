@@ -5,7 +5,7 @@ import pytz
 # Title of the app
 st.title("🌍 Time Zone Converter")
 
-# User input for the source time
+# User input for the time to convert
 st.subheader("Enter a Specific Time to Convert")
 
 # Allow user to input time and date
