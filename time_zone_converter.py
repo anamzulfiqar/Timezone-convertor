@@ -17,12 +17,25 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Instructions for user
+st.markdown("""
+    <div style="font-size: 1.2em;">
+        <p>Welcome to the Time Zone Converter!</p>
+        <p>Please follow these steps:</p>
+        <ol>
+            <li>Enter the specific date and time you wish to convert.</li>
+            <li>Select the source country and target country.</li>
+            <li>Click the "Convert Time" button to see the converted time.</li>
+        </ol>
+    </div>
+""", unsafe_allow_html=True)
+
 # Subheader for user input
 st.subheader("Enter a Specific Time to Convert")
 
 # Allow user to input time and date
-input_time = st.time_input("Select a time:")
-input_date = st.date_input("Select a date:")
+input_time = st.time_input("Select a time (in HH:MM AM/PM format):", value=datetime.now().time())
+input_date = st.date_input("Select a date:", value=datetime.now().date())
 
 # Comprehensive list of time zones for various countries
 timezones_dict = {
@@ -242,21 +255,21 @@ source_country = st.selectbox("Select Source Country", list(timezones_dict.keys(
 target_country = st.selectbox("Select Target Country", list(timezones_dict.keys()))
 
 # Button to convert time
-if st.button("Convert Time"):
+if st.button("Convert Time", key="convert_button", help="Click to convert the time from source to target country", css_class="btn-success"):
     if input_time and input_date:
         # Combine date and time into a datetime object
         source_time = datetime.combine(input_date, input_time)
-        
+
         # Get the corresponding timezone for the selected countries
         source_timezone = pytz.timezone(timezones_dict[source_country])
         target_timezone = pytz.timezone(timezones_dict[target_country])
-        
+
         # Localize the source time and convert it to the target timezone
         localized_time = source_timezone.localize(source_time)
         converted_time = localized_time.astimezone(target_timezone)
-        
+
         # Display the converted time
-        st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %I:%M:%S %p')}")
 
 # Footer for app information
 st.markdown("""
@@ -264,8 +277,25 @@ st.markdown("""
     .footer {
         text-align: center;
         font-size: 1em;
-        color: #808080;
+        color: black; /* Your name color */
     }
     </style>
-    <div class="footer">Created by [Anam Zulfiqar]</div>
+    <div class="footer">Created by Anam</div>
+""", unsafe_allow_html=True)
+
+# Custom CSS for the button
+st.markdown("""
+    <style>
+    .btn-success {
+        background-color: green;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-success:hover {
+        background-color: darkgreen;
+    }
+    </style>
 """, unsafe_allow_html=True)
