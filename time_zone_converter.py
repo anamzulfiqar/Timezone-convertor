@@ -33,8 +33,8 @@ st.markdown("""
 # Subheader for user input
 st.subheader("Enter a Specific Time to Convert")
 
-# Allow user to input time and date
-input_time = st.time_input("Select a time (in HH:MM AM/PM format):", value=datetime.now().time())
+# Allow user to input time and date without default value
+input_time = st.time_input("Select a time (in HH:MM AM/PM format):", value=None)
 input_date = st.date_input("Select a date:", value=datetime.now().date())
 
 # Comprehensive list of time zones for various countries
