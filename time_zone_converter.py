@@ -173,9 +173,12 @@ timezones_dict = {
     "Saint Vincent and the Grenadines": "America/St_Vincent",
     "Samoa": "Pacific/Apia",
     "San Marino": "Europe/San_Marino",
+    "Sao Tome and Principe": "Africa/Sao_Tome",
     "Saudi Arabia": "Asia/Riyadh",
     "Senegal": "Africa/Dakar",
     "Serbia": "Europe/Belgrade",
+    "Seychelles": "Indian/Seychelles",
+    "Sierra Leone": "Africa/Freetown",
     "Singapore": "Asia/Singapore",
     "Slovakia": "Europe/Bratislava",
     "Slovenia": "Europe/Ljubljana",
@@ -222,23 +225,22 @@ timezones_dict = {
     "Zimbabwe": "Africa/Harare",
 }
 
-# Display dropdown for selecting countries
-country = st.selectbox("Select a country:", list(timezones_dict.keys()))
+# Dropdown for selecting source time zone
+selected_source_country = st.selectbox("Select source country:", list(timezones_dict.keys()))
+selected_source_timezone = timezones_dict[selected_source_country]
 
-# Get the selected timezone
-timezone = timezones_dict[country]
+# Dropdown for selecting target time zone
+selected_target_country = st.selectbox("Select target country:", list(timezones_dict.keys()))
+selected_target_timezone = timezones_dict[selected_target_country]
 
-# Create the full datetime object
-full_datetime = datetime.combine(input_date, input_time)
+# Combine the selected date and time into a datetime object
+if input_time and input_date:
+    input_datetime = datetime.combine(input_date, input_time)
+    source_timezone = pytz.timezone(selected_source_timezone)
+    input_datetime_source = source_timezone.localize(input_datetime)
 
-# Convert the time to the selected timezone
-local_tz = pytz.timezone(timezone)
-local_time = local_tz.localize(full_datetime)
-
-# Show the converted time in other major time zones
-st.subheader(f"Converted Times for {country}:")
-for country_name, tz_name in timezones_dict.items():
-    if country_name != country:  # Skip the selected country
-        target_tz = pytz.timezone(tz_name)
-        target_time = local_time.astimezone(target_tz)
-        st.write(f"{country_name}: {target_time.strftime('%Y-%m-%d %H:%M:%S')} ({tz_name})")
+    # Button to convert time
+    if st.button("Convert"):
+        # Convert the input time to the selected target time zone
+        converted_time = input_datetime_source.astimezone(pytz.timezone(selected_target_timezone))
+        st.write(f"Converted time in {selected_target_country}: {converted_time.strftime('%Y-%m-%d %H:%M:%S')}")
