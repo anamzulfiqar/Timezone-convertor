@@ -265,20 +265,19 @@ if st.button("Convert Time", help="Click to convert the time from source to targ
         hour = input_time.hour
         minute = input_time.minute
 
-        if hour is not None and minute is not None:
-            # Create a time object based on user input
-            source_time = datetime.combine(input_date, datetime.min.time().replace(hour=hour, minute=minute))
+        # Create a time object based on user input
+        source_time = datetime.combine(input_date, input_time.time())
 
-            # Get the corresponding timezone for the selected countries
-            source_timezone = pytz.timezone(timezones_dict[source_country])
-            target_timezone = pytz.timezone(timezones_dict[target_country])
+        # Get the corresponding timezone for the selected countries
+        source_timezone = pytz.timezone(timezones_dict[source_country])
+        target_timezone = pytz.timezone(timezones_dict[target_country])
 
-            # Localize the source time and convert it to the target timezone
-            localized_time = source_timezone.localize(source_time)
-            converted_time = localized_time.astimezone(target_timezone)
+        # Localize the source time and convert to the target timezone
+        localized_time = source_timezone.localize(source_time)
+        converted_time = localized_time.astimezone(target_timezone)
 
-            # Display the converted time
-            st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %I:%M:%S %p')}")
+        # Display the converted time
+        st.success(f"Converted Time in {target_country}: {converted_time.strftime('%Y-%m-%d %I:%M:%S %p')}")
     except ValueError:
         st.error("Invalid time format! Please use 'hh:mm AM/PM' format.")
 
