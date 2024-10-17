@@ -178,7 +178,6 @@ timezones_dict = {
     "Nicaragua": "America/Managua",
     "Niger": "Africa/Niamey",
     "Nigeria": "Africa/Lagos",
-    "North Korea": "Asia/Pyongyang",
     "North Macedonia": "Europe/Skopje",
     "Norway": "Europe/Oslo",
     "Oman": "Asia/Muscat",
@@ -267,7 +266,7 @@ if st.button("Convert Time", help="Click to convert the time from source to targ
 
         if hour is not None and minute is not None:
             # Create a datetime object based on user input
-            hour_24 = hour  # 24-hour format
+            hour_24 = hour % 24  # 24-hour format adjustment
             source_time = datetime.combine(input_date, datetime.min.replace(hour=hour_24, minute=minute))
 
             # Get the corresponding timezone for the selected countries
