@@ -3,10 +3,10 @@ from datetime import datetime
 import pytz
 
 # Title of the app
-st.title("🌍 Time Zone Converter")
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🌍 Time Zone Converter</h1>", unsafe_allow_html=True)
 
-# User input for the time to convert
-st.subheader("Enter a Specific Time to Convert")
+# Instructions for users
+st.markdown("<h3 style='color: #555;'>Instructions</h3>", unsafe_allow_html=True)
 
 # Allow user to input time and date
 input_time = st.time_input("Select a time:")
