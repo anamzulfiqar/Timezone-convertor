@@ -260,14 +260,14 @@ target_country = st.selectbox("Select Target Country", list(timezones_dict.keys(
 if st.button("Convert Time", help="Click to convert the time from source to target country"):
     # Parse the time input
     try:
+        # Attempt to parse the input time
         input_time = datetime.strptime(time_input.strip(), "%I:%M %p")
         hour = input_time.hour
         minute = input_time.minute
 
         if hour is not None and minute is not None:
             # Create a datetime object based on user input
-            hour_24 = hour % 24  # 24-hour format adjustment
-            source_time = datetime.combine(input_date, datetime.min.replace(hour=hour_24, minute=minute))
+            source_time = datetime.combine(input_date, datetime.min.replace(hour=hour, minute=minute))
 
             # Get the corresponding timezone for the selected countries
             source_timezone = pytz.timezone(timezones_dict[source_country])
