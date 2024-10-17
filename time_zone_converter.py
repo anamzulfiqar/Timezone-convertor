@@ -181,6 +181,7 @@ timezones_dict = {
     "Oman": "Asia/Muscat",
     "Pakistan": "Asia/Karachi",
     "Palau": "Pacific/Palau",
+    "Palestine": "Asia/Gaza",
     "Panama": "America/Panama",
     "Papua New Guinea": "Pacific/Port_Moresby",
     "Paraguay": "America/Asuncion",
@@ -255,7 +256,7 @@ source_country = st.selectbox("Select Source Country", list(timezones_dict.keys(
 target_country = st.selectbox("Select Target Country", list(timezones_dict.keys()))
 
 # Button to convert time
-if st.button("Convert Time", key="convert_button", help="Click to convert the time from source to target country", css_class="btn-success"):
+if st.button("Convert Time", help="Click to convert the time from source to target country"):
     if input_time and input_date:
         # Combine date and time into a datetime object
         source_time = datetime.combine(input_date, input_time)
